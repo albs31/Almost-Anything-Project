@@ -74,19 +74,22 @@ public class Graph
             {
                 Edge e1 = new Edge(current, closest1);
                 edges.add(e1);
-                current.connections[0] = e1;
+                current.connections.add(e1);
+                closest1.connections.add(e1);
             }
             if (closest2 != null) 
             {
                 Edge e2 = new Edge(current, closest2);
                 edges.add(e2);
-                current.connections[1] = e2;
+                current.connections.add(e2);
+                closest2.connections.add(e2);
             }
             if (closest3 != null) 
             {
                 Edge e3 = new Edge(current, closest3);
                 edges.add(e3);
-                current.connections[2] = e3;
+                current.connections.add(e3);
+                closest3.connections.add(e3);
             }
         }
     }
