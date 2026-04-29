@@ -1,18 +1,26 @@
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.PriorityQueue;
 
 public class Graph 
 {
     private ArrayList<Node> nodes;
     private ArrayList<Edge> edges;
 
-    public Graph(int numNodes, double width, double height) 
+    public int width;
+    public int height;
+
+    public Graph(int numNodes, int width, int height) 
     {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
 
+        this.width = width;
+        this.height = height;
+
         for (int i = 0; i < numNodes; i++) 
         {
-            Node n = new Node(Math.random() * width, Math.random() * height);
+            Node n = new Node((int) (Math.random() * width), (int) (Math.random() * height));
             nodes.add(n);
         }
 
@@ -127,8 +135,60 @@ public class Graph
         return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
     }
 
-    public static ArrayList<Node> findPath(Node startNode, Node endNode) 
+    public static ArrayList<Node> findPath(Node startNode, Node endNode, Graph graph)
     {
+        //A* implementation soon (working on it)
+        PriorityQueue<Node> openSet = new PriorityQueue<>();
+        HashSet<Node> closedSet = new HashSet<>();
+
+        //Initialize start node
+        startNode.g = 0;
+        startNode.h = h(startNode, endNode);   
+        startNode.f = startNode.g + startNode.h;
+        startNode.parent = null;
+
+        
+        openSet.add(startNode);
+
+        while(!openSet.isEmpty()){
+            Node current = openSet.poll();
+
+            if (current == endNode) {
+                //Reconstructing path
+                ArrayList<Node> path = new ArrayList<>();
+                Node step = current;
+                while (step != null) {
+                    path.add(0, step);
+                    step = step.parent;
+                }
+                
+                return path;
+            }
+                
+            closedSet.add(current);
+
+            //Fetch neighbors
+            for (Edge edge : current.connections) {
+                if (edge == null) continue;
+                Node neighbor = (edge.from == current) ? edge.to : edge.from;
+                if (!neighbor.isActive|| closedSet.contains(neighbor)) continue;
+
+                double tentativeG = current.g + edge.getCost();
+
+                if (tentativeG < neighbor.g || !openSet.contains(neighbor)) {
+                    neighbor.g = tentativeG;
+                    neighbor.h = h(neighbor, endNode);
+                    neighbor.f = neighbor.g + neighbor.h;
+                    neighbor.parent = current;
+
+                    if (!openSet.contains(neighbor))
+                    openSet.add(neighbor);
+
+                }
+
+                }
+            }
+
         return new ArrayList<>();
     }
 }
