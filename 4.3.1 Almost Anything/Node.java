@@ -1,17 +1,20 @@
-class Node implements Comparable<Node>
+import java.util.ArrayList;
+
+public class Node implements Comparable<Node>
 {
-    public double x;
-    public double y;
+    public int x;
+    public int y;
 
     public double g;
     public double h;
     public double f;
     
     public Node parent;
-    public Edge[] connections = new Edge[3];
+    public ArrayList<Edge> connections = new ArrayList<>();
     public boolean isActive = true;
     public int nodeType = 0; // 0 for intersection, 1 for building, 2 for park
 
+//generate univeral seed for each node
     public long getSeed() 
     {
         long bitsX = Double.doubleToLongBits(x);
@@ -20,12 +23,13 @@ class Node implements Comparable<Node>
         return seed; 
     }
 
-    public Node(double x, double y) 
+    public Node(int x, int y) 
     {
         this.x = x;
         this.y = y;
     }
 
+    @Override
     public int compareTo(Node other) 
     {
         return Double.compare(this.f, other.f);
