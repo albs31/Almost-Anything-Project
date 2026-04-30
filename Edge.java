@@ -1,12 +1,13 @@
 import java.util.ArrayList;
 
-//edge class
+//Edge class to connect nodes and hold cars
 public class Edge 
 {
     public Node from;
     public Node to;
     public ArrayList<Car> cars;
-//make edge between two nodes
+
+    //Constructor to make edge between two nodes
     public Edge(Node from, Node to) 
     {
         this.from = from;
@@ -14,13 +15,13 @@ public class Edge
         this.cars = new ArrayList<>();
     }
 
-//solve for line length
+    //Solve for line distance
     public double getDistance() 
     {
         return Math.sqrt(Math.pow((to.x - from.x), 2) + Math.pow((to.y - from.y), 2));
     }
 
-//solve for cost
+    //Solve for cost (taking into account cars)
     public double getCost() 
     {
         return getDistance() + (cars.size() * 1.2);
