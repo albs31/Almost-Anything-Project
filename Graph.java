@@ -2,14 +2,18 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
+//Graph class for A* to pathfind in
 public class Graph 
 {
+    //Initializes nodes and edges
     private ArrayList<Node> nodes;
     private ArrayList<Edge> edges;
 
+    //Graph parameters
     public int width;
     public int height;
 
+    //Constructor to generate random nodes and edges with 3 connections
     public Graph(int numNodes, int width, int height) 
     {
         nodes = new ArrayList<>();
@@ -24,6 +28,7 @@ public class Graph
             nodes.add(n);
         }
 
+        //Iterate through each node
         for (int i = 0; i < nodes.size(); i++) 
         {
             Node current = nodes.get(i);
@@ -36,6 +41,7 @@ public class Graph
             double dist2 = Double.MAX_VALUE;
             double dist3 = Double.MAX_VALUE;
             
+            //Find 3 closest nodes to connect to
             for (int j = 0; j < nodes.size(); j++)
             {
                 if (i == j)
@@ -70,6 +76,7 @@ public class Graph
                 }
             }
             
+            //Connect to the 3 closest nodes
             if (closest1 != null) 
             {
                 Edge e1 = new Edge(current, closest1);
@@ -94,6 +101,7 @@ public class Graph
         }
     }
 
+    //Add random roadblocks and cars to the graph
     public void addRoadblocks(int numNodes) 
     {
         for (int i = 0; i < numNodes; i++) 
@@ -103,6 +111,7 @@ public class Graph
         }
     }
 
+    //Add random cars to the graph
     public void addCars(int numCars) 
     {
         for (int i = 0; i < numCars; i++) 
@@ -113,6 +122,7 @@ public class Graph
         }
     }
 
+    //Setter/getter methods to add nodes
     public void addNode(Node node) 
     {
         nodes.add(node);
@@ -133,14 +143,16 @@ public class Graph
         return edges;
     }
 
+    //Heuristic function for A* (Euclidean distance)
     public static double h(Node a, Node b) 
     {
         return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
     }
 
+    //A* pathfinding algorithm
     public static ArrayList<Node> findPath(Node startNode, Node endNode, Graph graph)
     {
-        //A* implementation soon (working on it)
+        //A* implementation
         PriorityQueue<Node> openSet = new PriorityQueue<>();
         HashSet<Node> closedSet = new HashSet<>();
 
@@ -149,7 +161,6 @@ public class Graph
         startNode.h = h(startNode, endNode);   
         startNode.f = startNode.g + startNode.h;
         startNode.parent = null;
-
         
         openSet.add(startNode);
 
@@ -178,6 +189,7 @@ public class Graph
 
                 double tentativeG = current.g + edge.getCost();
 
+                //If this path to neighbor is better, update its scores and parent
                 if (tentativeG < neighbor.g || !openSet.contains(neighbor)) {
                     neighbor.g = tentativeG;
                     neighbor.h = h(neighbor, endNode);
